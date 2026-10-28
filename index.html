@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#061329">
+<title>Ruang Informatika</title>
+<style>
+:root {
+  --bg:#061329;
+  --panel:#0d2343;
+  --line:#29466d;
+  --text:#f4f8ff;
+  --muted:#a8bbd7;
+  --blue:#258bff;
+  --cyan:#62e4f5;
+}
+* {box-sizing:border-box}
+html {scroll-behavior:smooth}
+body {
+  margin:0;color:var(--text);
+  font:15px/1.65 system-ui,sans-serif;
+  background:radial-gradient(ellipse at 80% 10%,#125bbe35,transparent 35%),var(--bg);
+}
+a {color:inherit;text-decoration:none}
+.container {width:min(1160px,calc(100% - 36px));margin:auto}
+header {
+  position:sticky;top:0;z-index:10;
+  background:#051125ed;backdrop-filter:blur(15px);
+  border-bottom:1px solid var(--line);
+}
+.nav {
+  height:76px;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;
+}
+.brand {display:flex;align-items:center;gap:10px;font-weight:850;font-size:18px}
+.logo {
+  width:40px;height:40px;display:grid;place-items:center;
+  border-radius:13px;background:linear-gradient(145deg,#43b7ff,#5969ff);
+  font-size:24px;box-shadow:0 0 25px #258bff40;
+}
+.links,.actions {display:flex;align-items:center;gap:17px}
+.links {font-size:13px;color:#c2d1e7}
+.btn {
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 16px;border-radius:12px;border:1px solid var(--line);
+  font-weight:750;font-size:13px;cursor:pointer;
+}
+.primary {
+  background:linear-gradient(100deg,#1687ff,#3974ff);
+  border-color:transparent;box-shadow:0 8px 28px #1f78ff35;
+}
+.outline {background:#071831;border-color:var(--blue)}
+.toggle {display:none;background:transparent;color:white;border:1px solid var(--line);padding:8px;border-radius:9px}
+.hero {padding:65px 0 32px}
+.hero-grid {display:grid;grid-template-columns:1.05fr .95fr;gap:25px;align-items:center}
+.eyebrow {
+  display:inline-block;padding:8px 13px;border-radius:30px;
+  border:1px solid #45a5ff70;background:#1666c61a;color:#b8e9ff;
+  font-size:11px;font-weight:800;letter-spacing:.5px;
+}
+h1 {font-size:clamp(39px,5vw,63px);line-height:1.08;letter-spacing:-2px;margin:22px 0 18px}
+.gradient {
+  background:linear-gradient(95deg,#65caff,#3987ff 55%,#a6a4ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.copy {font-size:16px;line-height:1.85;color:#b5c6df}
+.hero-actions {display:flex;flex-wrap:wrap;gap:12px;margin-top:25px}
+.note {display:flex;flex-wrap:wrap;gap:13px;color:#91a9c9;font-size:12px;margin-top:20px}
+.visual {position:relative;min-height:350px;display:grid;place-items:center}
+.glow {position:absolute;width:280px;height:280px;border-radius:50%;background:#087dff;filter:blur(100px);opacity:.3}
+.laptop {
+  width:min(100%,460px);position:relative;padding:13px;
+  border:1px solid #68b3ff88;border-radius:22px;
+  background:linear-gradient(145deg,#194071,#05132a);
+  box-shadow:0 28px 70px #0007;
+  transform:perspective(900px) rotateY(-5deg);
+}
+.screen {background:#08172f;border-radius:13px;padding:18px;min-height:260px}
+.screen-top {font-size:10px;color:#9db5d6;border-bottom:1px solid var(--line);padding-bottom:12px}
+.screen-title {font-size:21px;font-weight:850;margin-top:18px}
+.small {font-size:11px;color:#90a8c8}
+.prow {display:flex;justify-content:space-between;font-size:11px;margin:14px 0 5px}
+.progress {height:7px;background:#172e50;border-radius:20px;overflow:hidden}
+.progress span {display:block;height:100%;background:linear-gradient(90deg,#168cff,#5ce4f1)}
+.minis {display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+.mini {padding:9px 7px;background:#143158;border:1px solid #29466d;border-radius:10px}
+.mini b {display:block;font-size:10px}
+.mini span {display:block;color:#71d9ff;font-size:20px}
+.base {height:12px;width:110%;margin-left:-5%;background:linear-gradient(90deg,#243c60,#7a9ec5,#20395d);border-radius:3px 3px 15px 15px}
+.float {
+  position:absolute;padding:11px;border:1px solid #61adff60;
+  border-radius:13px;background:#071b39f2;font-size:11px;
+  box-shadow:0 15px 45px #0006;
+}
+.float b {display:block}
+.float small {color:#91a9c9}
+.f1 {left:-1%;top:12%}
+.f2 {right:-1%;bottom:12%}
+.audience {
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--line);background:#081c39;border-radius:18px;
+  padding:16px 5px;margin:12px auto 65px;
+}
+.aud {display:flex;align-items:center;gap:10px;padding:8px 13px;border-right:1px solid var(--line)}
+.aud:last-child {border:0}
+.aud-icon {font-size:22px;color:#72d9ff}
+.aud b {display:block;font-size:13px}
+.aud small {display:block;color:#9db1cf;font-size:11px}
+section.content {padding:12px 0 65px}
+.kicker {color:#69c9ff;font-size:12px;font-weight:850;letter-spacing:1.3px}
+h2 {font-size:clamp(28px,3vw,39px);line-height:1.2;letter-spacing:-1px;margin:8px 0 12px}
+.muted {color:var(--muted)}
+.section-head {display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:25px}
+.cards {display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.card {
+  padding:22px;border:1px solid var(--line);border-radius:18px;
+  background:linear-gradient(145deg,#0f274be8,#071831ed);
+}
+.card-icon {
+  width:44px;height:44px;display:grid;place-items:center;
+  border-radius:13px;background:#1c83ff30;color:#72d9ff;
+  font-size:22px;margin-bottom:15px;
+}
+.card h3 {margin:0 0 7px;font-size:17px}
+.card p {margin:0;color:#a7bad5;font-size:13px}
+.learning {display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.topic {display:flex;gap:12px;padding:13px 0;border-bottom:1px solid #29466d}
+.topic:last-child {border:0}
+.no {width:34px;height:34px;display:grid;place-items:center;background:#2187ff30;border-radius:10px;color:#83d9ff;flex-shrink:0}
+.cta {
+  padding:32px;border:1px solid #479aff55;border-radius:22px;
+  background:linear-gradient(130deg,#102b51,#081a35);
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+footer {border-top:1px solid var(--line);padding:24px 0;color:#91a7c5;font-size:12px}
+.footer-inner {display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hidden {display:none!important}
+.login-wrap {min-height:75vh;display:grid;place-items:center;padding:40px 15px}
+.login-card {
+  width:min(450px,100%);padding:28px;border:1px solid #67a6ff50;
+  border-radius:22px;background:linear-gradient(145deg,#0f274b,#06152b);
+  box-shadow:0 22px 60px #0007;
+}
+.back {display:block;color:#a9c7ef;font-size:13px;margin-bottom:20px}
+.role {display:inline-block;padding:5px 10px;border-radius:20px;background:#2387ff30;color:#8ad8ff;font-size:11px;font-weight:850;margin-top:15px}
+.login-card h1 {font-size:30px;letter-spacing:-1px;margin:10px 0}
+.login-card p {color:var(--muted);font-size:13px}
+.choices {display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.choices a {padding:10px;border:1px solid var(--line);border-radius:10px;text-align:center;font-size:12px}
+.field {margin:16px 0}
+.field label {display:block;font-size:13px;margin-bottom:7px}
+.field input {width:100%;padding:13px;border:1px solid #74a4e655;border-radius:10px;background:#07172e;color:white}
+.login-card button {width:100%}
+.notice {padding:12px;border-radius:10px;background:#f4b14a14;border:1px solid #f4b14a50;color:#f4d49d!important;font-size:12px!important}
+#loginMessage {color:#9be8db;font-size:13px;margin-top:12px}
+@media(max-width:950px) {
+ .links {gap:10px}.hero-grid {grid-template-columns:1fr 1fr}
+ .audience {grid-template-columns:repeat(2,1fr)}
+ .aud:nth-child(2) {border:0}
+ .aud:nth-child(3),.aud:nth-child(4) {border-top:1px solid var(--line)}
+ .cards {grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:680px) {
+ .nav {height:67px}.brand {font-size:15px}.logo {width:35px;height:35px}
+ .toggle {display:block}.links {display:none;position:absolute;top:67px;left:0;right:0;background:#081a35;padding:18px;flex-direction:column;align-items:stretch}
+ .links.open {display:flex}.actions .btn {display:none}
+ .hero {padding-top:40px}.hero-grid {grid-template-columns:1fr}
+ .visual {min-height:290px}.laptop {width:88%}.screen {padding:13px;min-height:225px}
+ .float {padding:8px;font-size:10px}.f1 {top:5%}.f2 {bottom:5%}
+ .audience {margin-bottom:42px}.aud {padding:9px;gap:7px}.aud b {font-size:12px}.aud small {font-size:10px}
+ .section-head {display:block}.section-head .btn {margin-top:15px}
+ .cards,.learning {grid-template-columns:1fr}.cta {display:block;padding:23px}
+ .cta .hero-actions {margin-top:15px}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="container nav">
+  <a class="brand" href="./index.html"><span class="logo">◈</span>Ruang Informatika</a>
+  <button class="toggle" id="menuToggle" aria-label="Buka menu">☰</button>
+  <nav class="links" id="navLinks">
+    <a href="#beranda">Beranda</a><a href="#tentang">Tentang</a>
+    <a href="#fitur">Fitur</a><a href="#materi">Materi</a><a href="#akses">Akses</a>
+  </nav>
+  <div class="actions">
+    <a class="btn outline" href="?page=login&role=siswa">♙ Masuk Siswa</a>
+    <a class="btn primary" href="?page=login&role=guru">▣ Masuk Guru</a>
+  </div>
+</div>
+</header>
+
+<main id="homePage">
+<section class="hero" id="beranda">
+<div class="container hero-grid">
+  <div>
+    <div class="eyebrow">✦ SELAMAT DATANG DI RUANG INFORMATIKA</div>
+    <h1>Belajar Informatika <span class="gradient">lebih mudah dan menyenangkan.</span></h1>
+    <p class="copy">Platform pembelajaran digital untuk siswa dan guru. Pelajari materi, asah kemampuan melalui latihan, dan kerjakan ulangan harian dalam satu ruang belajar.</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="?page=login&role=siswa">Mulai Belajar →</a>
+      <a class="btn outline" href="#fitur">Jelajahi Fitur ↘</a>
+    </div>
+    <div class="note"><span>✓ Materi terstruktur</span><span>✓ Latihan interaktif</span><span>✓ Akses siswa dan guru</span></div>
+  </div>
+  <div class="visual">
+    <div class="glow"></div>
+    <div class="float f1">⌘ <b>Laboratorium Praktik</b><small>Belajar sambil mencoba</small></div>
+    <div class="laptop"><div class="screen">
+      <div class="screen-top">RUANG BELAJAR / DASHBOARD</div>
+      <div class="screen-title">Halo, Pembelajar!</div>
+      <div class="small">Pilih topik dan lanjutkan progres belajarmu.</div>
+      <div class="prow"><span>Berpikir Komputasional</span><b>80%</b></div>
+      <div class="progress"><span style="width:80%"></span></div>
+      <div class="prow"><span>Sistem Komputer</span><b>55%</b></div>
+      <div class="progress"><span style="width:55%"></span></div>
+      <div class="minis">
+        <div class="mini"><span>⌘</span><b>Pemrograman</b><small>Belajar kode</small></div>
+        <div class="mini"><span>▦</span><b>Sistem Komputer</b><small>Kenali perangkat</small></div>
+        <div class="mini"><span>◎</span><b>Jaringan</b><small>Internet aman</small></div>
+      </div>
+    </div><div class="base"></div></div>
+    <div class="float f2">✦ <b>Belajar Terarah</b><small>Materi dan evaluasi terpadu</small></div>
+  </div>
+</div>
+</section>
+
+<div class="container audience" id="tentang">
+  <div class="aud"><span class="aud-icon">♙</span><div><b>Untuk Siswa</b><small>Belajar, berlatih, dan evaluasi.</small></div></div>
+  <div class="aud"><span class="aud-icon">♧</span><div><b>Untuk Guru</b><small>Kelola materi dan evaluasi.</small></div></div>
+  <div class="aud"><span class="aud-icon">▤</span><div><b>Materi Terstruktur</b><small>Dari dasar hingga praktik.</small></div></div>
+  <div class="aud"><span class="aud-icon">♜</span><div><b>Latihan Interaktif</b><small>Uji pemahaman mandiri.</small></div></div>
+</div>
+
+<section class="content" id="fitur">
+<div class="container">
+  <div class="section-head"><div><div class="kicker">FITUR UNGGULAN</div><h2>Semua kebutuhan belajar<br><span class="gradient">dalam satu platform.</span></h2><p class="muted">Ruang Informatika membantu proses belajar dan mengajar menjadi lebih terorganisasi.</p></div><a class="btn outline" href="?page=login&role=siswa">Mulai Jelajahi →</a></div>
+  <div class="cards">
+    <article class="card"><div class="card-icon">▣</div><h3>Materi Pembelajaran</h3><p>Pelajari konsep Informatika melalui topik yang disusun secara terstruktur.</p></article>
+    <article class="card"><div class="card-icon">✎</div><h3>Ulangan Harian</h3><p>Kerjakan ulangan melalui website ujian yang sudah digunakan sebelumnya.</p><p style="margin-top:14px"><a class="btn outline" href="https://ulangan-informatikaglobe3.netlify.app/" target="_blank" rel="noopener">Buka Website Ulangan ↗</a></p></article>
+    <article class="card"><div class="card-icon">⌘</div><h3>Laboratorium Praktik</h3><p>Latihan algoritma, pemrograman, dan pemecahan masalah secara bertahap.</p></article>
+    <article class="card"><div class="card-icon">☑</div><h3>Tugas dan Proyek</h3><p>Kerjakan proyek praktik berdasarkan instruksi pembelajaran.</p></article>
+    <article class="card"><div class="card-icon">▥</div><h3>Rekap Nilai</h3><p>Siapkan pengelolaan hasil belajar dan kemajuan siswa.</p></article>
+    <article class="card"><div class="card-icon">☏</div><h3>Ruang Guru</h3><p>Area guru untuk pengelolaan materi, tugas, dan evaluasi kelas.</p></article>
+  </div>
+</div>
+</section>
+
+<section class="content" id="materi">
+<div class="container learning">
+  <div class="card"><div class="kicker">JALUR PEMBELAJARAN</div><h2>Bangun pemahaman dari dasar.</h2><p class="muted">Mulai dari konsep inti, lalu kembangkan keterampilan melalui contoh dan latihan. Materi ini merupakan struktur awal yang dapat diperluas sesuai kurikulum sekolah.</p><p><a class="btn primary" href="?page=login&role=siswa">Masuk untuk Belajar →</a></p></div>
+  <div class="card">
+    <div class="topic"><span class="no">01</span><div><b>Berpikir Komputasional</b><small class="muted">Dekomposisi, pola, abstraksi, dan algoritma.</small></div></div>
+    <div class="topic"><span class="no">02</span><div><b>Sistem Komputer</b><small class="muted">Perangkat keras, perangkat lunak, dan sistem operasi.</small></div></div>
+    <div class="topic"><span class="no">03</span><div><b>Jaringan dan Keamanan Digital</b><small class="muted">Internet, privasi, dan keamanan akun.</small></div></div>
+    <div class="topic"><span class="no">04</span><div><b>Data dan Konten Digital</b><small class="muted">Analisis data, desain visual, dan hak cipta.</small></div></div>
+    <div class="topic"><span class="no">05</span><div><b>Algoritma dan Pemrograman</b><small class="muted">Input, proses, output, percabangan, dan perulangan.</small></div></div>
+  </div>
+</div>
+</section>
+
+<section class="content" id="akses"><div class="container"><div class="cta">
+  <div><div class="kicker">MULAI SEKARANG</div><h2>Siap masuk ke Ruang Informatika?</h2><p class="muted">Pilih jalur sesuai peranmu. Siswa dan guru memiliki halaman masuk terpisah.</p></div>
+  <div class="hero-actions" style="margin:0"><a class="btn primary" href="?page=login&role=siswa">Masuk Siswa →</a><a class="btn outline" href="?page=login&role=guru">Masuk Guru →</a></div>
+</div></div></section>
+</main>
+
+<main id="loginPage" class="hidden">
+<div class="login-wrap"><div class="login-card">
+  <a class="back" href="./index.html">← Kembali ke beranda</a>
+  <div class="logo">◈</div><div><span class="role" id="rolePill">AKSES SISWA</span></div>
+  <h1 id="loginTitle">Selamat datang, Pembelajar.</h1>
+  <p id="loginDescription">Masuk untuk melanjutkan pembelajaran.</p>
+  <div class="choices"><a href="?page=login&role=siswa" id="studentChoice">♙ Masuk Siswa</a><a href="?page=login&role=guru" id="teacherChoice">▣ Masuk Guru</a></div>
+  <form id="loginForm">
+    <div class="field"><label for="username">Email atau nama pengguna</label><input id="username" name="username" autocomplete="username" required placeholder="Masukkan email atau nama pengguna"></div>
+    <div class="field"><label for="password">Kata sandi</label><input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Masukkan kata sandi"></div>
+    <button class="btn primary" type="submit" id="loginButton">Masuk ke Ruang Siswa →</button>
+  </form>
+  <p class="notice">Penting: ini baru tampilan halaman login. Autentikasi belum terhubung ke server. Jangan gunakan kata sandi asli sampai sistem autentikasi dipasang.</p>
+  <div id="loginMessage" role="status"></div>
+</div></div>
+</main>
+
+<footer><div class="container footer-inner"><span>© <span id="year"></span> Ruang Informatika</span><span>Media pembelajaran digital untuk siswa dan guru</span><a href="#beranda">Kembali ke atas ↑</a></div></footer>
+<script>
+const params=new URLSearchParams(location.search);
+const isLogin=params.get("page")==="login";
+const role=params.get("role")==="guru"?"guru":"siswa";
+document.getElementById("homePage").classList.toggle("hidden",isLogin);
+document.getElementById("loginPage").classList.toggle("hidden",!isLogin);
+document.getElementById("year").textContent=new Date().getFullYear();
+if(isLogin){
+  const guru=role==="guru";
+  document.title=guru?"Masuk Guru | Ruang Informatika":"Masuk Siswa | Ruang Informatika";
+  document.getElementById("rolePill").textContent=guru?"AKSES GURU":"AKSES SISWA";
+  document.getElementById("loginTitle").textContent=guru?"Selamat datang, Guru.":"Selamat datang, Pembelajar.";
+  document.getElementById("loginDescription").textContent=guru?"Masuk untuk mengelola materi, tugas, dan evaluasi kelas.":"Masuk untuk melanjutkan materi, latihan, dan ulangan harian.";
+  document.getElementById("loginButton").textContent=guru?"Masuk ke Ruang Guru →":"Masuk ke Ruang Siswa →";
+  document.getElementById(guru?"teacherChoice":"studentChoice").style.borderColor="#258bff";
+  document.getElementById("loginForm").addEventListener("submit",e=>{
+    e.preventDefault();
+    document.getElementById("loginMessage").textContent="Tampilan login sudah siap, tetapi autentikasi belum aktif. Hubungkan layanan autentikasi sebelum digunakan.";
+  });
+}
+const toggle=document.getElementById("menuToggle");
+const nav=document.getElementById("navLinks");
+toggle.addEventListener("click",()=>{
+  const opened=nav.classList.toggle("open");
+  toggle.setAttribute("aria-expanded",String(opened));
+});
+nav.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{
+  nav.classList.remove("open");toggle.setAttribute("aria-expanded","false");
+}));
+</script>
+</body>
+</html>
