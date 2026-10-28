@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ulangan Informatika Kelas 7 | Ruang Informatika</title>
+<style>
+:root {
+  --bg: #061329;
+  --panel: #0d2343;
+  --line: #29466d;
+  --text: #f4f8ff;
+  --muted: #a8bbd7;
+  --blue: #258bff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.7 system-ui, sans-serif;
+}
+.container { width: min(850px, 94%); margin: auto; }
+header { padding: 17px 0; border-bottom: 1px solid var(--line); }
+a { color: inherit; text-decoration: none; }
+.brand { font-weight: 850; font-size: 19px; }
+main { padding: 25px 0 60px; }
+.panel {
+  background: linear-gradient(145deg, #0f274b, #071831);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 23px;
+  margin-bottom: 18px;
+}
+h1 { font-size: clamp(27px, 5vw, 38px); line-height: 1.2; }
+.muted { color: var(--muted); }
+.badge {
+  display: inline-block;
+  padding: 5px 11px;
+  border: 1px solid #3e8fe9;
+  border-radius: 30px;
+  color: #b9e7ff;
+  background: #13325b;
+  font-size: 12px;
+  font-weight: 800;
+}
+.field { margin: 15px 0; }
+.field label { display: block; margin-bottom: 6px; }
+.field input {
+  width: 100%;
+  padding: 12px;
+  color: white;
+  background: #06152b;
+  border: 1px solid #42628b;
+  border-radius: 10px;
+  font: inherit;
+}
+.btn {
+  display: inline-block;
+  padding: 12px 17px;
+  color: white;
+  background: linear-gradient(100deg, #1687ff, #3974ff);
+  border: 0;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.btn:disabled { opacity: .6; cursor: wait; }
+.question { padding: 18px 0; border-top: 1px solid var(--line); }
+.question p { font-weight: 700; }
+.option {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  margin: 7px 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #091a33;
+  cursor: pointer;
+}
+.option input { margin-top: 6px; accent-color: var(--blue); }
+.notice {
+  padding: 12px;
+  border: 1px solid #f4b14a50;
+  border-radius: 10px;
+  background: #f4b14a14;
+  color: #f4d49d;
+  font-size: 13px;
+}
+.status { margin-top: 12px; color: #a7f3d0; }
+.result { font-size: 22px; font-weight: 850; color: #80dfff; }
+.hidden { display: none !important; }
+@media(max-width:600px) { .panel { padding: 16px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <a class="brand" href="./index.html">◈ Ruang Informatika</a>
+  </div>
+</header>
+
+<main class="container">
+  <section class="panel" id="intro">
+    <span class="badge">SMP · KELAS VII</span>
+    <h1>Ulangan Harian Informatika</h1>
+    <h3>Bab 3: Mencari dan Membagikan Informasi</h3>
+    <p class="muted">
+      Materi: Mencari Informasi di Internet. Terdiri dari 20
+      soal pilihan ganda. Setiap jawaban benar bernilai 5 poin.
+    </p>
+
+    <div class="notice">
+      Gunakan password yang diberikan guru. Pastikan nama lengkap
+      sudah benar sebelum memulai ujian.
+    </div>
+
+    <div class="field">
+      <label for="nama">Nama lengkap</label>
+      <input id="nama" maxlength="100" autocomplete="name"
+             placeholder="Masukkan nama lengkap">
+    </div>
+
+    <div class="field">
+      <label for="password">Password ujian</label>
+      <input id="password" type="password" autocomplete="off"
+             placeholder="Masukkan password ujian">
+    </div>
+
+    <button class="btn" id="startBtn">Verifikasi dan Mulai Ujian</button>
+    <div id="startMsg" class="status" role="status"></div>
+  </section>
+
+  <section class="panel hidden" id="exam">
+    <span class="badge">UJIAN BERLANGSUNG</span>
+    <h2>Jawab semua pertanyaan</h2>
+    <p class="muted">Pilih satu jawaban terbaik untuk setiap soal.</p>
+    <form id="quizForm">
+      <div id="questions"></div>
+      <button class="btn" id="submitBtn" type="submit">
+        Kumpulkan Jawaban
+      </button>
+    </form>
+    <div id="submitMsg" class="status" role="status"></div>
+  </section>
+
+  <section class="panel hidden" id="result">
+    <h2>Hasil Ulangan</h2>
+    <p id="score" class="result"></p>
+    <p id="details" class="muted"></p>
+    <a class="btn" href="./index.html">Kembali ke Halaman Depan</a>
+  </section>
+</main>
+
+<script>
+const QUESTIONS = [
+[
+'Internet menyediakan berbagai informasi yang dapat diakses dengan mudah. Namun, banyaknya informasi tersebut menyebabkan pengguna perlu memiliki kemampuan untuk ....',
+['Menghafal seluruh informasi di internet','Memilih informasi yang sesuai dengan kebutuhan','Menghapus informasi yang tidak diperlukan','Membatasi penggunaan internet setiap hari','Menyimpan semua informasi yang ditemukan']
+],
+[
+'Salah satu mesin pencari yang digunakan untuk menemukan informasi di internet dengan cepat adalah ....',
+['Microsoft Word','Microsoft Excel','Google','Microsoft PowerPoint','Adobe Photoshop']
+],
+[
+'Google dapat menampilkan hasil pencarian yang relevan karena menggunakan ....',
+['Perangkat keras tanpa perangkat lunak','Sistem penyimpanan manual','Jaringan komputer lokal saja','Algoritma pencarian yang canggih','Program pengolah angka']
+],
+[
+'Berikut ini yang bukan termasuk faktor utama yang memengaruhi hasil pencarian Google menurut materi adalah ....',
+['Pengertian dan konteks pencarian','Keragaman informasi','Kualitas konten','Pengaturan pencarian','Warna casing komputer pengguna']
+],
+[
+'Google menggunakan teknologi Natural Language Processing (NLP) untuk ....',
+['Memahami bahasa dan konteks kata kunci pencarian','Mempercepat pengisian baterai komputer','Menghapus seluruh halaman web','Mengubah ukuran layar komputer','Memperbaiki kerusakan perangkat keras']
+],
+[
+'Ketika seseorang mencari informasi menggunakan kata kunci "sup ikan salmon", Google akan lebih mengutamakan hasil berupa ....',
+['Lokasi penjualan ikan hias','Jenis-jenis ikan air tawar','Resep dan cara membuat sup ikan salmon','Sejarah perkembangan internet','Daftar restoran cepat saji']
+],
+[
+'Algoritma freshness pada Google berfungsi untuk ....',
+['Menghapus informasi lama secara otomatis','Mengutamakan informasi terbaru pada pencarian yang memerlukan kebaruan','Menampilkan halaman web berdasarkan warna','Membatasi jumlah pengguna internet','Mengurutkan semua hasil berdasarkan abjad']
+],
+[
+'Google berusaha menampilkan konten berkualitas tinggi. Salah satu ciri konten berkualitas adalah ....',
+['Memiliki banyak iklan yang muncul','Menggunakan warna yang mencolok','Memiliki judul yang sangat panjang','Memberikan informasi yang relevan dan bermanfaat','Mengandung banyak informasi yang berulang']
+],
+[
+'Dalam mengorganisasi informasi, mesin pencari Google bekerja melalui tiga tahapan utama, yaitu ....',
+['Crawling, pengindeksan, dan menampilkan hasil pencarian','Mengetik, mencetak, dan menyimpan','Mengunduh, menghapus, dan mengirim','Membaca, menyalin, dan menempel','Membuka, menutup, dan mengedit']
+],
+[
+'Perangkat lunak yang digunakan Google untuk menjelajahi halaman web secara otomatis dikenal dengan nama ....',
+['Google Drive','Google Docs','Google Maps','Google Translate','Googlebot']
+],
+[
+'Proses crawling dalam mesin pencari merupakan kegiatan ....',
+['Menghapus situs yang tidak digunakan','Menjelajahi halaman web untuk menemukan dan mengumpulkan informasi','Menyimpan dokumen ke flashdisk','Mengubah halaman web menjadi gambar','Mengirim pesan kepada pemilik situs']
+],
+[
+'Setelah proses crawling selesai, Google melakukan pengindeksan. Tujuan utama pengindeksan adalah ....',
+['Mengganti nama seluruh halaman web','Menghapus informasi dari internet','Menganalisis dan mengorganisasi informasi agar dapat ditemukan saat pencarian','Mempercepat koneksi internet pengguna','Membatasi akses ke semua situs web']
+],
+[
+'Salah satu penyebab halaman web tidak muncul dalam indeks Google adalah ....',
+['Halaman memiliki informasi yang bermanfaat','Halaman menggunakan bahasa Indonesia','Halaman memiliki judul yang jelas','Halaman menggunakan aturan meta robots yang melarang pengindeksan','Halaman dapat dibuka melalui komputer']
+],
+[
+'Seorang siswa ingin mencari informasi khusus mengenai sel tumbuhan monokotil. Kata kunci yang paling tepat digunakan adalah ....',
+['Sel','Tumbuhan','Sel tumbuhan','Jenis tumbuhan','Sel tumbuhan monokotil']
+],
+[
+'Penggunaan tanda kutip dalam pencarian Google bertujuan untuk ....',
+['Mencari kata atau frasa dengan susunan yang sama persis','Menghapus seluruh hasil pencarian','Menampilkan hasil pencarian secara acak','Membatasi pencarian hanya pada gambar','Menerjemahkan kata kunci secara otomatis']
+],
+[
+'Seorang siswa ingin mencari informasi tentang virus dalam biologi, tetapi tidak ingin menampilkan informasi tentang virus komputer. Teknik pencarian yang paling tepat adalah ....',
+['virus + komputer','virus OR komputer','virus biologi -komputer','"virus komputer"','komputer virus biologi']
+],
+[
+'Untuk mencari dokumen mengenai soal ujian Informatika dalam format PDF, kata kunci yang paling tepat adalah ....',
+['Soal ujian Informatika gambar','Soal ujian Informatika filetype:pdf','Soal ujian Informatika video','Soal ujian Informatika komputer','Soal ujian Informatika internet']
+],
+[
+'Seorang siswa diminta mencari data jumlah penduduk Indonesia yang bersumber dari situs Badan Pusat Statistik (BPS). Kata kunci yang paling tepat adalah ....',
+['Jumlah penduduk Indonesia media sosial','Jumlah penduduk Indonesia gambar','Jumlah penduduk Indonesia video','Jumlah penduduk Indonesia site:bps.go.id','Jumlah penduduk Indonesia permainan']
+],
+[
+'Fitur pencarian lanjutan (advanced search) pada Google dapat digunakan untuk ....',
+['Menghapus seluruh riwayat komputer','Mengganti sistem operasi komputer','Memperbaiki jaringan internet yang rusak','Membuat akun email baru secara otomatis','Membatasi hasil pencarian berdasarkan bahasa, waktu, dan pengaturan lainnya']
+],
+[
+'Rina mencari informasi menggunakan kata kunci "kejahatan internet", tetapi hasil yang diperoleh masih kurang lengkap. Ia kemudian menggunakan kata kunci kejahatan internet OR cybercrime. Tujuan penggunaan operator OR tersebut adalah ....',
+['Memperluas pencarian dengan memasukkan istilah alternatif','Menghapus seluruh hasil pencarian sebelumnya','Membatasi pencarian hanya pada satu situs','Menampilkan informasi dalam bentuk gambar saja','Mengurutkan hasil pencarian berdasarkan tanggal']
+]
+];
+
+const LETTERS = ['A','B','C','D','E'];
+let started = false;
+
+document.getElementById('startBtn').addEventListener('click', async () => {
+  const nama = document.getElementById('nama').value.trim();
+  const password = document.getElementById('password').value;
+  const msg = document.getElementById('startMsg');
+
+  if (!nama || !password) {
+    msg.textContent = 'Nama lengkap dan password wajib diisi.';
+    return;
+  }
+
+  const btn = document.getElementById('startBtn');
+  btn.disabled = true;
+  msg.textContent = 'Memeriksa password...';
+
+  try {
+    const response = await fetch('/.netlify/functions/verify-class7-exam', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({password})
+    });
+    const data = await response.json();
+    if (!response.ok || !data.ok) {
+      throw new Error(data.message || 'Password tidak benar.');
+    }
+
+    renderQuestions();
+    document.getElementById('intro').classList.add('hidden');
+    document.getElementById('exam').classList.remove('hidden');
+    started = true;
+  } catch (error) {
+    msg.textContent = error.message || 'Gagal memverifikasi password.';
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+function renderQuestions() {
+  const root = document.getElementById('questions');
+  root.replaceChildren();
+
+  QUESTIONS.forEach((question, i) => {
+    const section = document.createElement('div');
+    section.className = 'question';
+
+    const title = document.createElement('p');
+    title.textContent = `${i + 1}. ${question[0]}`;
+    section.appendChild(title);
+
+    question[1].forEach((option, j) => {
+      const label = document.createElement('label');
+      label.className = 'option';
+
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = `q${i}`;
+      input.value = String(j);
+
+      const text = document.createElement('span');
+      text.textContent = `${LETTERS[j]}. ${option}`;
+
+      label.append(input, text);
+      section.appendChild(label);
+    });
+
+    root.appendChild(section);
+  });
+}
+
+document.getElementById('quizForm').addEventListener('submit', async event => {
+  event.preventDefault();
+  if (!started) return;
+
+  const answers = {};
+  QUESTIONS.forEach((_, i) => {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    answers[i] = selected ? Number(selected.value) : null;
+  });
+
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('submitMsg');
+  btn.disabled = true;
+  msg.textContent = 'Mengirim jawaban dan menyimpan hasil...';
+
+  try {
+    const response = await fetch('/.netlify/functions/submit-class7-quiz', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        name: document.getElementById('nama').value.trim(),
+        password: document.getElementById('password').value,
+        answers
+      })
+    });
+
+    const data = await response.json();
+    if (!response.ok || !data.ok) {
+      throw new Error(data.message || 'Gagal menyimpan hasil.');
+    }
+
+    document.getElementById('exam').classList.add('hidden');
+    document.getElementById('result').classList.remove('hidden');
+    document.getElementById('score').textContent = `Nilai: ${data.score}/100`;
+    document.getElementById('details').textContent =
+      `Benar: ${data.correct} · Salah: ${data.wrong} · Kosong: ${data.empty}. Hasil tersimpan di Google Sheets.`;
+  } catch (error) {
+    msg.textContent = error.message || 'Terjadi kesalahan.';
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
