@@ -239,7 +239,7 @@ footer {border-top:1px solid var(--line);padding:24px 0;color:#91a7c5;font-size:
   <div class="section-head"><div><div class="kicker">FITUR UNGGULAN</div><h2>Semua kebutuhan belajar<br><span class="gradient">dalam satu platform.</span></h2><p class="muted">Ruang Informatika membantu proses belajar dan mengajar menjadi lebih terorganisasi.</p></div><a class="btn outline" href="?page=login&role=siswa">Mulai Jelajahi →</a></div>
   <div class="cards">
     <article class="card"><div class="card-icon">▣</div><h3>Materi Pembelajaran</h3><p>Pelajari konsep Informatika melalui topik yang disusun secara terstruktur.</p></article>
-    <article class="card"><div class="card-icon">✎</div><h3>Ulangan Harian</h3><p>Kerjakan ulangan melalui website ujian yang sudah digunakan sebelumnya.</p><p style="margin-top:14px"><a class="btn outline" href="https://ulangan-informatikaglobe3.netlify.app/" target="_blank" rel="noopener">Buka Website Ulangan ↗</a></p></article>
+    <article class="card"><div class="card-icon">✎</div><h3>Ulangan Harian</h3><p>Kerjakan ulangan harian berdasarkan kelas dan soal yang disediakan guru.</p><p style="margin-top:14px"><a class="btn outline" href="./ulangan-smp7.html">Buka Ulangan Kelas 7 ↗</a></p></article>
     <article class="card"><div class="card-icon">⌘</div><h3>Laboratorium Praktik</h3><p>Latihan algoritma, pemrograman, dan pemecahan masalah secara bertahap.</p></article>
     <article class="card"><div class="card-icon">☑</div><h3>Tugas dan Proyek</h3><p>Kerjakan proyek praktik berdasarkan instruksi pembelajaran.</p></article>
     <article class="card"><div class="card-icon">▥</div><h3>Rekap Nilai</h3><p>Siapkan pengelolaan hasil belajar dan kemajuan siswa.</p></article>
@@ -292,6 +292,7 @@ const role=params.get("role")==="guru"?"guru":"siswa";
 document.getElementById("homePage").classList.toggle("hidden",isLogin);
 document.getElementById("loginPage").classList.toggle("hidden",!isLogin);
 document.getElementById("year").textContent=new Date().getFullYear();
+
 if(isLogin){
   const guru=role==="guru";
   document.title=guru?"Masuk Guru | Ruang Informatika":"Masuk Siswa | Ruang Informatika";
@@ -305,6 +306,7 @@ if(isLogin){
     document.getElementById("loginMessage").textContent="Tampilan login sudah siap, tetapi autentikasi belum aktif. Hubungkan layanan autentikasi sebelum digunakan.";
   });
 }
+
 const toggle=document.getElementById("menuToggle");
 const nav=document.getElementById("navLinks");
 toggle.addEventListener("click",()=>{
@@ -312,7 +314,8 @@ toggle.addEventListener("click",()=>{
   toggle.setAttribute("aria-expanded",String(opened));
 });
 nav.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{
-  nav.classList.remove("open");toggle.setAttribute("aria-expanded","false");
+  nav.classList.remove("open");
+  toggle.setAttribute("aria-expanded","false");
 }));
 </script>
 </body>
