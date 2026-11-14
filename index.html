@@ -274,11 +274,63 @@ footer {border-top:1px solid var(--line);padding:24px 0;color:#91a7c5;font-size:
   <h1 id="loginTitle">Selamat datang, Pembelajar.</h1>
   <p id="loginDescription">Masuk untuk melanjutkan pembelajaran.</p>
   <div class="choices"><a href="?page=login&role=siswa" id="studentChoice">♙ Masuk Siswa</a><a href="?page=login&role=guru" id="teacherChoice">▣ Masuk Guru</a></div>
-  <form id="loginForm">
-    <div class="field"><label for="username">Email atau nama pengguna</label><input id="username" name="username" autocomplete="username" required placeholder="Masukkan email atau nama pengguna"></div>
-    <div class="field"><label for="password">Kata sandi</label><input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Masukkan kata sandi"></div>
-    <button class="btn primary" type="submit" id="loginButton">Masuk ke Ruang Siswa →</button>
-  </form>
+ 
+<form id="loginForm">
+  <div class="field">
+    <label for="username" id="usernameLabel">
+      Nama lengkap
+    </label>
+    <input
+      id="username"
+      name="username"
+      autocomplete="name"
+      required
+      placeholder="Masukkan nama lengkap"
+    >
+  </div>
+
+  <div id="studentClassFields">
+    <div class="field">
+      <label for="jenjang">Jenjang Pendidikan</label>
+      <select id="jenjang" required>
+        <option value="">Pilih jenjang</option>
+        <option value="SMP">SMP</option>
+        <option value="SMA">SMA</option>
+        <option value="SMK">SMK</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="kelas">Nama Kelas</label>
+      <select id="kelas" required disabled>
+        <option value="">Pilih jenjang terlebih dahulu</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="password" id="passwordLabel">
+      PIN dari Guru
+    </label>
+    <input
+      id="password"
+      name="password"
+      type="password"
+      autocomplete="off"
+      required
+      placeholder="Masukkan PIN kelas"
+    >
+  </div>
+
+  <button
+    class="btn primary"
+    type="submit"
+    id="loginButton"
+  >
+    Masuk ke Ruang Siswa →
+  </button>
+</form>
+
   <p class="notice">Penting: ini baru tampilan halaman login. Autentikasi belum terhubung ke server. Jangan gunakan kata sandi asli sampai sistem autentikasi dipasang.</p>
   <div id="loginMessage" role="status"></div>
 </div></div>
