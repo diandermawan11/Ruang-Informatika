@@ -1,105 +1,98 @@
 
 const CLASS_CONFIG = {
-  Obedient:    { jenjang: 'SMP', pin: 'PIN_SMP7' },
-  Persistent:  { jenjang: 'SMP', pin: 'PIN_SMP7' },
-  Supportive:  { jenjang: 'SMP', pin: 'PIN_SMP7' },
-  Confident:   { jenjang: 'SMP', pin: 'PIN_SMP7' },
+  Obedient:    { jenjang:"SMP", pinEnv:"PIN_OBEDIENT" },
+  Persistent:  { jenjang:"SMP", pinEnv:"PIN_PERSISTENT" },
+  Supportive:  { jenjang:"SMP", pinEnv:"PIN_SUPPORTIVE" },
+  Confident:   { jenjang:"SMP", pinEnv:"PIN_CONFIDENT" },
 
-  Respectful:  { jenjang: 'SMP', pin: 'PIN_SMP8' },
-  Reflective:  { jenjang: 'SMP', pin: 'PIN_SMP8' },
-  Inspiring:   { jenjang: 'SMP', pin: 'PIN_SMP8' },
+  Respectful:  { jenjang:"SMP", pinEnv:"PIN_RESPECTFUL" },
+  Reflective:  { jenjang:"SMP", pinEnv:"PIN_REFLECTIVE" },
+  Inspiring:   { jenjang:"SMP", pinEnv:"PIN_INSPIRING" },
 
-  Motivated:   { jenjang: 'SMA', pin: 'PIN_SMA10' },
-  Courteous:   { jenjang: 'SMA', pin: 'PIN_SMA11' },
-  Leader:      { jenjang: 'SMA', pin: 'PIN_SMA12' },
+  Motivated:   { jenjang:"SMA", pinEnv:"PIN_MOTIVATED" },
+  Courteous:   { jenjang:"SMA", pinEnv:"PIN_COURTEOUS" },
+  Leader:      { jenjang:"SMA", pinEnv:"PIN_LEADER" },
 
-  Innovative:  { jenjang: 'SMK', pin: 'PIN_SMK10' },
-  Industrious: { jenjang: 'SMK', pin: 'PIN_SMK11' }
+  Innovative:  { jenjang:"SMK", pinEnv:"PIN_INNOVATIVE" },
+  Industrious: { jenjang:"SMK", pinEnv:"PIN_INDUSTRIOUS" }
 };
 
-exports.handler = async (event) => {
-  if (event.httpMethod !== 'POST') {
-    return reply(405, {
-      ok: false,
-      message: 'Metode tidak diizinkan.'
-    });
+exports.handler = async event => {
+  if(event.httpMethod !== "POST"){
+    return reply(405,{ok:false,message:"Metode tidak diizinkan."});
   }
 
   let data;
 
-  try {
-    data = JSON.parse(event.body || '{}');
-  } catch {
-    return reply(400, {
-      ok: false,
-      message: 'Data tidak valid.'
-    });
+  try{
+    data = JSON.parse(event.body || "{}");
+  }catch{
+    return reply(400,{ok:false,message:"Data tidak valid."});
   }
 
-  const nama = clean(data.name, 100);
-  const jenjang = clean(data.jenjang, 10);
-  const kelas = clean(data.kelas, 30);
-  const password = data.password;
+  const kelas = data.kelas;
+  const jenjang = data.jenjang;
 
-  if (!nama || !jenjang || !kelas) {
-    return reply(400, {
-      ok: false,
-      message: 'Nama, jenjang, dan kelas wajib diisi.'
-    });
+  if(typeof data.password !== "string" || !data.password){
+    return reply(400,{ok:false,message:"PIN wajib diisi."});
+  }
+
+  // Mendukung sistem ujian lama.
+  if(!kelas && !jenjang){
+    const oldPin = process.env.PASSWORD_SMP7 || process.env.PIN_SMP7;
+
+    if(!oldPin){
+      return reply(503,{ok:false,message:"PIN lama belum dikonfigurasi."});
+    }
+
+    if(data.password !== oldPin){
+      return reply(401,{ok:false,message:"PIN ujian salah."});
+    }
+
+    return reply(200,{ok:true});
   }
 
   const config = CLASS_CONFIG[kelas];
 
-  if (!config || config.jenjang !== jenjang) {
-    return reply(400, {
-      ok: false,
-      message: 'Pilihan jenjang atau kelas tidak valid.'
+  if(!config){
+    return reply(400,{ok:false,message:"Kelas tidak terdaftar."});
+  }
+
+  if(config.jenjang !== jenjang){
+    return reply(400,{ok:false,message:"Jenjang tidak sesuai."});
+  }
+
+  const expected = process.env[config.pinEnv];
+
+  if(!expected){
+    return reply(503,{
+      ok:false,
+      message:`PIN kelas ${kelas} belum dikonfigurasi.`
     });
   }
 
-  const expected = process.env[config.pin];
-
-  if (!expected) {
-    return reply(503, {
-      ok: false,
-      message: 'PIN kelas belum dikonfigurasi oleh guru.'
+  if(data.password !== expected){
+    return reply(401,{
+      ok:false,
+      message:"PIN kelas tidak valid."
     });
   }
 
-  if (
-    typeof password !== 'string' ||
-    password !== expected
-  ) {
-    return reply(401, {
-      ok: false,
-      message: 'PIN ujian salah.'
-    });
-  }
-
-  return reply(200, {
-    ok: true,
-    message: 'Verifikasi berhasil.',
-    name: nama,
+  return reply(200,{
+    ok:true,
     jenjang,
-    kelas
+    kelas,
+    message:"PIN berhasil diverifikasi."
   });
 };
 
-function clean(value, max) {
-  return typeof value === 'string'
-    ? value.trim()
-        .replace(/[<>\u0000-\u001f]/g, '')
-        .slice(0, max)
-    : '';
-}
-
-function reply(statusCode, body) {
+function reply(statusCode,body){
   return {
     statusCode,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': 'no-store'
+    headers:{
+      "Content-Type":"application/json; charset=utf-8",
+      "Cache-Control":"no-store"
     },
-    body: JSON.stringify(body)
+    body:JSON.stringify(body)
   };
 }
