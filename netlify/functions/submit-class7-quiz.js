@@ -10,6 +10,25 @@ const ANSWER_KEY = [
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E'];
 
+// Daftar jenjang, kelas, dan PIN masing-masing.
+const CLASS_CONFIG = {
+  Obedient:    { jenjang: 'SMP', pin: 'PIN_OBEDIENT' },
+  Persistent:  { jenjang: 'SMP', pin: 'PIN_PERSISTENT' },
+  Supportive:  { jenjang: 'SMP', pin: 'PIN_SUPPORTIVE' },
+  Confident:   { jenjang: 'SMP', pin: 'PIN_CONFIDENT' },
+
+  Respectful:  { jenjang: 'SMP', pin: 'PIN_RESPECTFUL' },
+  Reflective:  { jenjang: 'SMP', pin: 'PIN_REFLECTIVE' },
+  Inspiring:   { jenjang: 'SMP', pin: 'PIN_INSPIRING' },
+
+  Motivated:   { jenjang: 'SMA', pin: 'PIN_MOTIVATED' },
+  Courteous:   { jenjang: 'SMA', pin: 'PIN_COURTEOUS' },
+  Leader:      { jenjang: 'SMA', pin: 'PIN_LEADER' },
+
+  Innovative:  { jenjang: 'SMK', pin: 'PIN_INNOVATIVE' },
+  Industrious: { jenjang: 'SMK', pin: 'PIN_INDUSTRIOUS' }
+};
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return reply(405, {
@@ -30,26 +49,56 @@ exports.handler = async (event) => {
   }
 
   const nama = clean(data.name, 100);
+  const kelas = clean(data.kelas, 30);
+  const jenjang = clean(data.jenjang, 10);
   const password = data.password;
 
-  if (!nama) {
+  if (!nama || !kelas || !jenjang) {
     return reply(400, {
       ok: false,
-      message: 'Nama lengkap wajib diisi.'
+      message: 'Nama, jenjang, dan kelas wajib diisi.'
+    });
+  }
+
+  // Periksa apakah kelas terdaftar.
+  if (!Object.prototype.hasOwnProperty.call(CLASS_CONFIG, kelas)) {
+    return reply(400, {
+      ok: false,
+      message: 'Kelas tidak terdaftar.'
+    });
+  }
+
+  const config = CLASS_CONFIG[kelas];
+
+  // Pastikan jenjang sesuai dengan kelas.
+  if (config.jenjang !== jenjang) {
+    return reply(400, {
+      ok: false,
+      message: 'Jenjang tidak sesuai dengan kelas.'
+    });
+  }
+
+  // Verifikasi PIN berdasarkan kelas.
+  const expectedPin = process.env[config.pin];
+
+  if (!expectedPin) {
+    return reply(503, {
+      ok: false,
+      message: 'PIN kelas belum dikonfigurasi oleh guru.'
     });
   }
 
   if (
-    !process.env.PASSWORD_SMP7 ||
     typeof password !== 'string' ||
-    password !== process.env.PASSWORD_SMP7
+    password !== expectedPin
   ) {
     return reply(401, {
       ok: false,
-      message: 'Password ujian tidak valid.'
+      message: 'PIN ujian tidak valid.'
     });
   }
 
+  // Periksa jawaban siswa.
   if (
     !data.answers ||
     typeof data.answers !== 'object' ||
@@ -88,6 +137,10 @@ exports.handler = async (event) => {
   const nilai = benar * 5;
   const waktuSubmit = new Date().toISOString();
 
+  const namaUlangan =
+    clean(data.namaUlangan, 150) ||
+    'Ulangan Harian Informatika';
+
   if (!SHEETS_WEB_APP_URL) {
     return reply(503, {
       ok: false,
@@ -95,6 +148,7 @@ exports.handler = async (event) => {
     });
   }
 
+  // Kirim hasil ke Google Sheets.
   try {
     const response = await fetch(SHEETS_WEB_APP_URL, {
       method: 'POST',
@@ -102,21 +156,23 @@ exports.handler = async (event) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        nama,
-        kelas: 'SMP Kelas 7',
-        nilai,
-        benar,
-        salah,
-        kosong,
+        nama: nama,
+        jenjang: jenjang,
+        kelas: kelas,
+        nilai: nilai,
+        benar: benar,
+        salah: salah,
+        kosong: kosong,
         totalSoal: ANSWER_KEY.length,
-        waktuSubmit,
-        judulUlangan:
-          'Ulangan Harian Informatika Kelas 7 - Bab 3'
+        waktuSubmit: waktuSubmit,
+        namaUlangan: namaUlangan
       })
     });
 
     if (!response.ok) {
-      throw new Error(`Google Sheets HTTP ${response.status}`);
+      throw new Error(
+        `Google Sheets HTTP ${response.status}`
+      );
     }
 
     const result = await response.json();
@@ -126,6 +182,7 @@ exports.handler = async (event) => {
         result.message || 'Penyimpanan ditolak.'
       );
     }
+
   } catch (error) {
     console.error('Penyimpanan hasil gagal:', error);
 
@@ -143,6 +200,8 @@ exports.handler = async (event) => {
     wrong: salah,
     empty: kosong,
     submittedAt: waktuSubmit,
+    jenjang: jenjang,
+    kelas: kelas,
     sheetSaved: true,
     emailSent: false
   });
