@@ -10,23 +10,22 @@ const ANSWER_KEY = [
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E'];
 
-// Daftar jenjang, kelas, dan PIN masing-masing.
 const CLASS_CONFIG = {
-  Obedient:    { jenjang: 'SMP', pin: 'PIN_OBEDIENT' },
-  Persistent:  { jenjang: 'SMP', pin: 'PIN_PERSISTENT' },
-  Supportive:  { jenjang: 'SMP', pin: 'PIN_SUPPORTIVE' },
-  Confident:   { jenjang: 'SMP', pin: 'PIN_CONFIDENT' },
+  Obedient:    { jenjang: 'SMP', pin: 'PIN_SMP7' },
+  Persistent:  { jenjang: 'SMP', pin: 'PIN_SMP7' },
+  Supportive:  { jenjang: 'SMP', pin: 'PIN_SMP7' },
+  Confident:   { jenjang: 'SMP', pin: 'PIN_SMP7' },
 
-  Respectful:  { jenjang: 'SMP', pin: 'PIN_RESPECTFUL' },
-  Reflective:  { jenjang: 'SMP', pin: 'PIN_REFLECTIVE' },
-  Inspiring:   { jenjang: 'SMP', pin: 'PIN_INSPIRING' },
+  Respectful:  { jenjang: 'SMP', pin: 'PIN_SMP8' },
+  Reflective:  { jenjang: 'SMP', pin: 'PIN_SMP8' },
+  Inspiring:   { jenjang: 'SMP', pin: 'PIN_SMP8' },
 
-  Motivated:   { jenjang: 'SMA', pin: 'PIN_MOTIVATED' },
-  Courteous:   { jenjang: 'SMA', pin: 'PIN_COURTEOUS' },
-  Leader:      { jenjang: 'SMA', pin: 'PIN_LEADER' },
+  Motivated:   { jenjang: 'SMA', pin: 'PIN_SMA10' },
+  Courteous:   { jenjang: 'SMA', pin: 'PIN_SMA11' },
+  Leader:      { jenjang: 'SMA', pin: 'PIN_SMA12' },
 
-  Innovative:  { jenjang: 'SMK', pin: 'PIN_INNOVATIVE' },
-  Industrious: { jenjang: 'SMK', pin: 'PIN_INDUSTRIOUS' }
+  Innovative:  { jenjang: 'SMK', pin: 'PIN_SMK10' },
+  Industrious: { jenjang: 'SMK', pin: 'PIN_SMK11' }
 };
 
 exports.handler = async (event) => {
@@ -49,36 +48,26 @@ exports.handler = async (event) => {
   }
 
   const nama = clean(data.name, 100);
-  const kelas = clean(data.kelas, 30);
   const jenjang = clean(data.jenjang, 10);
+  const kelas = clean(data.kelas, 30);
   const password = data.password;
 
-  if (!nama || !kelas || !jenjang) {
+  if (!nama || !jenjang || !kelas) {
     return reply(400, {
       ok: false,
       message: 'Nama, jenjang, dan kelas wajib diisi.'
     });
   }
 
-  // Periksa apakah kelas terdaftar.
-  if (!Object.prototype.hasOwnProperty.call(CLASS_CONFIG, kelas)) {
-    return reply(400, {
-      ok: false,
-      message: 'Kelas tidak terdaftar.'
-    });
-  }
-
   const config = CLASS_CONFIG[kelas];
 
-  // Pastikan jenjang sesuai dengan kelas.
-  if (config.jenjang !== jenjang) {
+  if (!config || config.jenjang !== jenjang) {
     return reply(400, {
       ok: false,
-      message: 'Jenjang tidak sesuai dengan kelas.'
+      message: 'Jenjang atau kelas tidak valid.'
     });
   }
 
-  // Verifikasi PIN berdasarkan kelas.
   const expectedPin = process.env[config.pin];
 
   if (!expectedPin) {
@@ -98,7 +87,6 @@ exports.handler = async (event) => {
     });
   }
 
-  // Periksa jawaban siswa.
   if (
     !data.answers ||
     typeof data.answers !== 'object' ||
@@ -148,7 +136,6 @@ exports.handler = async (event) => {
     });
   }
 
-  // Kirim hasil ke Google Sheets.
   try {
     const response = await fetch(SHEETS_WEB_APP_URL, {
       method: 'POST',
@@ -156,16 +143,16 @@ exports.handler = async (event) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        nama: nama,
-        jenjang: jenjang,
-        kelas: kelas,
-        nilai: nilai,
-        benar: benar,
-        salah: salah,
-        kosong: kosong,
+        nama,
+        jenjang,
+        kelas,
+        nilai,
+        benar,
+        salah,
+        kosong,
         totalSoal: ANSWER_KEY.length,
-        waktuSubmit: waktuSubmit,
-        namaUlangan: namaUlangan
+        waktuSubmit,
+        namaUlangan
       })
     });
 
@@ -200,8 +187,8 @@ exports.handler = async (event) => {
     wrong: salah,
     empty: kosong,
     submittedAt: waktuSubmit,
-    jenjang: jenjang,
-    kelas: kelas,
+    jenjang,
+    kelas,
     sheetSaved: true,
     emailSent: false
   });
