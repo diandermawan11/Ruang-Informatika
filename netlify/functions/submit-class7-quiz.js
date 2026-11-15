@@ -1,5 +1,6 @@
 
 const SHEETS_WEB_APP_URL = process.env.SHEETS_WEB_APP_URL;
+const CONTENT_API_SECRET = process.env.CONTENT_API_SECRET;
 
 const ANSWER_KEY = [
   'B', 'C', 'D', 'E', 'A',
@@ -11,24 +12,28 @@ const ANSWER_KEY = [
 const LETTERS = ['A', 'B', 'C', 'D', 'E'];
 
 const CLASS_CONFIG = {
-  Obedient:    { jenjang: 'SMP', pin: 'PIN_SMP7' },
-  Persistent:  { jenjang: 'SMP', pin: 'PIN_SMP7' },
-  Supportive:  { jenjang: 'SMP', pin: 'PIN_SMP7' },
-  Confident:   { jenjang: 'SMP', pin: 'PIN_SMP7' },
+  Responsible:  { jenjang: 'SD', pin: 'PIN_SD6' },
+  Reliable:     { jenjang: 'SD', pin: 'PIN_SD6' },
 
-  Respectful:  { jenjang: 'SMP', pin: 'PIN_SMP8' },
-  Reflective:  { jenjang: 'SMP', pin: 'PIN_SMP8' },
-  Inspiring:   { jenjang: 'SMP', pin: 'PIN_SMP8' },
+  Obedient:     { jenjang: 'SMP', pin: 'PIN_SMP7' },
+  Persistent:   { jenjang: 'SMP', pin: 'PIN_SMP7' },
+  Supportive:   { jenjang: 'SMP', pin: 'PIN_SMP7' },
+  Confident:    { jenjang: 'SMP', pin: 'PIN_SMP7' },
 
-  Motivated:   { jenjang: 'SMA', pin: 'PIN_SMA10' },
-  Courteous:   { jenjang: 'SMA', pin: 'PIN_SMA11' },
-  Leader:      { jenjang: 'SMA', pin: 'PIN_SMA12' },
+  Respectful:   { jenjang: 'SMP', pin: 'PIN_SMP8' },
+  Reflective:   { jenjang: 'SMP', pin: 'PIN_SMP8' },
+  Inspiring:    { jenjang: 'SMP', pin: 'PIN_SMP8' },
 
-  Innovative:  { jenjang: 'SMK', pin: 'PIN_SMK10' },
-  Industrious: { jenjang: 'SMK', pin: 'PIN_SMK11' }
+  Motivated:    { jenjang: 'SMA', pin: 'PIN_SMA10' },
+  Courteous:    { jenjang: 'SMA', pin: 'PIN_SMA11' },
+  Leader:       { jenjang: 'SMA', pin: 'PIN_SMA12' },
+
+  Innovative:   { jenjang: 'SMK', pin: 'PIN_SMK10' },
+  Industrious:  { jenjang: 'SMK', pin: 'PIN_SMK11' }
 };
 
 exports.handler = async (event) => {
+
   if (event.httpMethod !== 'POST') {
     return reply(405, {
       ok: false,
@@ -48,7 +53,7 @@ exports.handler = async (event) => {
   }
 
   const nama = clean(data.name, 100);
-  const jenjang = clean(data.jenjang, 10);
+  const jenjang = clean(data.jenjang, 10).toUpperCase();
   const kelas = clean(data.kelas, 30);
   const password = data.password;
 
@@ -59,6 +64,8 @@ exports.handler = async (event) => {
     });
   }
 
+  // VALIDASI KELAS
+
   const config = CLASS_CONFIG[kelas];
 
   if (!config || config.jenjang !== jenjang) {
@@ -67,6 +74,8 @@ exports.handler = async (event) => {
       message: 'Jenjang atau kelas tidak valid.'
     });
   }
+
+  // VALIDASI PIN
 
   const expectedPin = process.env[config.pin];
 
@@ -87,6 +96,8 @@ exports.handler = async (event) => {
     });
   }
 
+  // VALIDASI JAWABAN
+
   if (
     !data.answers ||
     typeof data.answers !== 'object' ||
@@ -99,7 +110,22 @@ exports.handler = async (event) => {
   }
 
   const answers = ANSWER_KEY.map((_, i) => {
-    const value = data.answers[i];
+    const raw = data.answers[i];
+
+    if (
+      raw === null ||
+      raw === undefined ||
+      raw === ''
+    ) {
+      return '';
+    }
+
+    const value =
+      typeof raw === 'number'
+        ? raw
+        : typeof raw === 'string'
+          ? Number(raw)
+          : NaN;
 
     return Number.isInteger(value) &&
       value >= 0 &&
@@ -107,6 +133,8 @@ exports.handler = async (event) => {
         ? LETTERS[value]
         : '';
   });
+
+  // HITUNG NILAI
 
   let benar = 0;
   let salah = 0;
@@ -122,12 +150,15 @@ exports.handler = async (event) => {
     }
   });
 
-  const nilai = benar * 5;
+  const totalSoal = ANSWER_KEY.length;
+  const nilai = Math.round((benar / totalSoal) * 100);
   const waktuSubmit = new Date().toISOString();
 
   const namaUlangan =
     clean(data.namaUlangan, 150) ||
     'Ulangan Harian Informatika';
+
+  // VALIDASI KONFIGURASI API
 
   if (!SHEETS_WEB_APP_URL) {
     return reply(503, {
@@ -136,13 +167,29 @@ exports.handler = async (event) => {
     });
   }
 
+  if (!CONTENT_API_SECRET) {
+    return reply(503, {
+      ok: false,
+      message: 'Secret API belum dikonfigurasi.'
+    });
+  }
+
+  // KIRIM HASIL KE GOOGLE APPS SCRIPT
+
   try {
     const response = await fetch(SHEETS_WEB_APP_URL, {
       method: 'POST',
+
       headers: {
         'Content-Type': 'application/json'
       },
+
       body: JSON.stringify({
+
+        action: 'saveExamResult',
+
+        apiSecret: CONTENT_API_SECRET,
+
         nama,
         jenjang,
         kelas,
@@ -150,9 +197,10 @@ exports.handler = async (event) => {
         benar,
         salah,
         kosong,
-        totalSoal: ANSWER_KEY.length,
+        totalSoal,
         waktuSubmit,
         namaUlangan
+
       })
     });
 
@@ -170,8 +218,18 @@ exports.handler = async (event) => {
       );
     }
 
+    if (!result.sheetSaved) {
+      throw new Error(
+        'Google Sheets belum mengonfirmasi penyimpanan.'
+      );
+    }
+
   } catch (error) {
-    console.error('Penyimpanan hasil gagal:', error);
+
+    console.error(
+      'Penyimpanan hasil gagal:',
+      error
+    );
 
     return reply(502, {
       ok: false,
@@ -180,19 +238,26 @@ exports.handler = async (event) => {
     });
   }
 
+  // RESPONS BERHASIL
+
   return reply(200, {
     ok: true,
     score: nilai,
     correct: benar,
     wrong: salah,
     empty: kosong,
+    total: totalSoal,
     submittedAt: waktuSubmit,
     jenjang,
     kelas,
     sheetSaved: true,
     emailSent: false
   });
+
 };
+
+
+// UTILITAS
 
 function clean(value, max) {
   return typeof value === 'string'
@@ -202,13 +267,16 @@ function clean(value, max) {
     : '';
 }
 
+
 function reply(statusCode, body) {
   return {
     statusCode,
+
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'no-store'
     },
+
     body: JSON.stringify(body)
   };
 }
