@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#061329">
 <title>Ruang Informatika</title>
 
 <style>
@@ -18,84 +17,51 @@
 }
 * {box-sizing:border-box}
 body {
-  margin:0;
-  color:var(--text);
+  margin:0;color:var(--text);
   font:15px/1.65 system-ui,sans-serif;
   background:radial-gradient(ellipse at 80% 10%,#125bbe35,transparent 35%),var(--bg);
 }
 a {color:inherit;text-decoration:none}
 .container {width:min(1160px,calc(100% - 36px));margin:auto}
 header {
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:#051125ed;
-  border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:10;
+  background:#051125ed;border-bottom:1px solid var(--line);
 }
 .nav {
-  min-height:76px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
+  min-height:76px;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;
 }
 .brand {font-size:18px;font-weight:850}
 .links,.actions {display:flex;gap:17px;align-items:center}
 .btn {
-  display:inline-flex;
-  justify-content:center;
-  padding:11px 16px;
-  border-radius:12px;
-  border:1px solid var(--line);
-  font-weight:750;
-  cursor:pointer;
+  display:inline-flex;justify-content:center;
+  padding:11px 16px;border-radius:12px;
+  border:1px solid var(--line);font-weight:750;cursor:pointer;
 }
-.primary {
-  background:linear-gradient(100deg,#1687ff,#3974ff);
-  border-color:transparent;
-}
+.primary {background:linear-gradient(100deg,#1687ff,#3974ff);border-color:transparent}
 .outline {background:#071831;border-color:var(--blue)}
 .hero {padding:65px 0 32px}
-.hero-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:25px;
-  align-items:center;
-}
+.hero-grid {display:grid;grid-template-columns:1fr 1fr;gap:25px;align-items:center}
 h1 {font-size:clamp(39px,5vw,63px);line-height:1.1}
 .gradient {
   background:linear-gradient(95deg,#65caff,#3987ff,#a6a4ff);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
+  -webkit-background-clip:text;color:transparent;
 }
 .copy {color:#b5c6df;font-size:16px;line-height:1.85}
 .hero-actions {display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
 .visual {
-  min-height:300px;
-  display:grid;
-  place-items:center;
+  min-height:300px;display:grid;place-items:center;
   background:linear-gradient(145deg,#194071,#05132a);
-  border:1px solid #68b3ff88;
-  border-radius:22px;
-  padding:25px;
+  border:1px solid #68b3ff88;border-radius:22px;padding:25px;
 }
 .screen {background:#08172f;border-radius:13px;padding:22px;width:100%}
 .screen-title {font-size:22px;font-weight:850}
 .progress {height:7px;background:#172e50;border-radius:20px;margin:8px 0 20px}
-.progress span {
-  display:block;
-  height:100%;
-  background:linear-gradient(90deg,#168cff,#5ce4f1);
-}
+.progress span {display:block;height:100%;background:linear-gradient(90deg,#168cff,#5ce4f1)}
 .audience {
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  border:1px solid var(--line);
-  background:#081c39;
-  border-radius:18px;
-  padding:16px;
-  margin:35px auto 65px;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--line);background:#081c39;
+  border-radius:18px;padding:16px;margin:35px auto 65px;
 }
 .aud {padding:10px;border-right:1px solid var(--line)}
 .aud:last-child {border:0}
@@ -104,68 +70,46 @@ h2 {font-size:32px}
 .muted {color:var(--muted)}
 .cards {display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
 .card {
-  padding:22px;
-  border:1px solid var(--line);
-  border-radius:18px;
-  background:linear-gradient(145deg,#0f274b,#071831);
+  padding:22px;border:1px solid var(--line);
+  border-radius:18px;background:linear-gradient(145deg,#0f274b,#071831);
 }
 .card h3 {margin:0 0 7px}
 .card p {color:#a7bad5;font-size:13px}
 .learning {display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .topic {padding:13px 0;border-bottom:1px solid var(--line)}
 .cta {
-  padding:32px;
-  border:1px solid #479aff55;
-  border-radius:22px;
-  background:linear-gradient(130deg,#102b51,#081a35);
+  padding:32px;border:1px solid #479aff55;
+  border-radius:22px;background:linear-gradient(130deg,#102b51,#081a35);
 }
 footer {border-top:1px solid var(--line);padding:24px 0;color:#91a7c5}
 .hidden {display:none!important}
 .login-wrap {min-height:75vh;display:grid;place-items:center;padding:40px 15px}
 .login-card {
-  width:min(490px,100%);
-  padding:28px;
-  border:1px solid #67a6ff50;
-  border-radius:22px;
+  width:min(490px,100%);padding:28px;
+  border:1px solid #67a6ff50;border-radius:22px;
   background:linear-gradient(145deg,#0f274b,#06152b);
 }
 .role {
-  display:inline-block;
-  padding:5px 10px;
-  border-radius:20px;
-  background:#2387ff30;
-  color:#8ad8ff;
-  font-size:11px;
-  font-weight:850;
+  display:inline-block;padding:5px 10px;border-radius:20px;
+  background:#2387ff30;color:#8ad8ff;font-size:11px;font-weight:850;
 }
 .login-card h1 {font-size:30px}
 .login-card p {color:var(--muted);font-size:13px}
 .choices {display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
 .choices a {
-  padding:10px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  text-align:center;
-  font-size:12px;
+  padding:10px;border:1px solid var(--line);
+  border-radius:10px;text-align:center;font-size:12px;
 }
 .field {margin:16px 0}
 .field label {display:block;font-size:13px;margin-bottom:7px}
 .field input,.field select {
-  width:100%;
-  padding:13px;
-  border:1px solid #74a4e655;
-  border-radius:10px;
-  background:#07172e;
-  color:white;
-  font:inherit;
+  width:100%;padding:13px;border:1px solid #74a4e655;
+  border-radius:10px;background:#07172e;color:white;font:inherit;
 }
 .login-card button {width:100%}
 .notice {
-  padding:12px;
-  border-radius:10px;
-  background:#f4b14a14;
-  border:1px solid #f4b14a50;
-  color:#f4d49d!important;
+  padding:12px;border-radius:10px;background:#f4b14a14;
+  border:1px solid #f4b14a50;color:#f4d49d!important;
 }
 #loginMessage {font-size:13px;margin-top:12px}
 #loginMessage.error {color:#ffb4b4}
@@ -180,10 +124,6 @@ button:disabled {opacity:.65;cursor:wait}
 }
 @media(max-width:500px) {
   .cards {grid-template-columns:1fr}
-  .actions {gap:7px}
-  .actions .btn {padding:9px;font-size:12px}
-  .hero {padding-top:35px}
-  .login-card {padding:20px}
 }
 </style>
 </head>
@@ -193,7 +133,6 @@ button:disabled {opacity:.65;cursor:wait}
 <header>
 <div class="container nav">
   <a class="brand" href="./index.html">◈ Ruang Informatika</a>
-
   <nav class="links">
     <a href="#beranda">Beranda</a>
     <a href="#tentang">Tentang</a>
@@ -201,7 +140,6 @@ button:disabled {opacity:.65;cursor:wait}
     <a href="#materi">Materi</a>
     <a href="#akses">Akses</a>
   </nav>
-
   <div class="actions">
     <a class="btn outline" href="?page=login&role=siswa">Masuk Siswa</a>
     <a class="btn primary" href="?page=login&role=guru">Masuk Guru</a>
@@ -222,7 +160,6 @@ button:disabled {opacity:.65;cursor:wait}
     Pelajari materi, asah kemampuan melalui latihan,
     dan kerjakan ulangan harian dalam satu ruang belajar.
   </p>
-
   <div class="hero-actions">
     <a class="btn primary" href="?page=login&role=siswa">Mulai Belajar →</a>
     <a class="btn outline" href="#fitur">Jelajahi Fitur</a>
@@ -255,35 +192,12 @@ button:disabled {opacity:.65;cursor:wait}
 <div class="container">
 <h2>Semua kebutuhan belajar dalam satu platform.</h2>
 <div class="cards">
-  <article class="card">
-    <h3>Materi Pembelajaran</h3>
-    <p>Pelajari konsep Informatika secara terstruktur.</p>
-  </article>
-
-  <article class="card">
-    <h3>Ulangan Harian</h3>
-    <p>Kerjakan ulangan yang diterbitkan guru sesuai kelas.</p>
-  </article>
-
-  <article class="card">
-    <h3>Laboratorium Praktik</h3>
-    <p>Latihan algoritma dan pemrograman.</p>
-  </article>
-
-  <article class="card">
-    <h3>Tugas dan Proyek</h3>
-    <p>Kerjakan dan kumpulkan proyek praktik.</p>
-  </article>
-
-  <article class="card">
-    <h3>Rekap Nilai</h3>
-    <p>Pantau hasil belajar dan evaluasi siswa.</p>
-  </article>
-
-  <article class="card">
-    <h3>Dashboard Guru</h3>
-    <p>Pengelolaan materi, soal, tugas, proyek, dan nilai.</p>
-  </article>
+  <article class="card"><h3>Materi Pembelajaran</h3><p>Pelajari konsep Informatika secara terstruktur.</p></article>
+  <article class="card"><h3>Ulangan Harian</h3><p>Kerjakan ulangan berdasarkan kelas.</p><a class="btn outline" href="./ulangan-smp7.html">Ulangan Kelas 7</a></article>
+  <article class="card"><h3>Laboratorium Praktik</h3><p>Latihan algoritma dan pemrograman.</p></article>
+  <article class="card"><h3>Tugas dan Proyek</h3><p>Kerjakan proyek praktik.</p></article>
+  <article class="card"><h3>Rekap Nilai</h3><p>Pengelolaan hasil belajar siswa.</p></article>
+  <article class="card"><h3>Ruang Guru</h3><p>Pengelolaan materi dan evaluasi.</p></article>
 </div>
 </div>
 </section>
@@ -295,7 +209,6 @@ button:disabled {opacity:.65;cursor:wait}
     <p class="muted">Pelajari konsep inti Informatika melalui contoh dan latihan.</p>
     <a class="btn primary" href="?page=login&role=siswa">Masuk untuk Belajar</a>
   </div>
-
   <div class="card">
     <div class="topic">01. Berpikir Komputasional</div>
     <div class="topic">02. Sistem Komputer</div>
@@ -333,49 +246,48 @@ button:disabled {opacity:.65;cursor:wait}
 
 <form id="loginForm">
 
-<div class="field" id="nameField">
-  <label for="username" id="usernameLabel">Nama lengkap</label>
-  <input id="username" name="username" maxlength="100"
-    placeholder="Masukkan nama lengkap"
-    autocomplete="name">
+<div class="field">
+<label for="username" id="usernameLabel">Nama lengkap</label>
+<input id="username" name="username" type="text" required maxlength="100"
+placeholder="Masukkan nama lengkap" autocomplete="name">
 </div>
 
 <div id="studentClassFields">
 
-  <div class="field">
-    <label for="jenjang">Jenjang Pendidikan</label>
-    <select id="jenjang" name="jenjang">
-      <option value="">Pilih jenjang</option>
-      <option value="SD">SD</option>
-      <option value="SMP">SMP</option>
-      <option value="SMA">SMA</option>
-      <option value="SMK">SMK</option>
-    </select>
-  </div>
+<div class="field">
+<label for="jenjang">Jenjang Pendidikan</label>
+<select id="jenjang" name="jenjang" required>
+<option value="">Pilih jenjang</option>
+<option value="SD">SD</option>
+<option value="SMP">SMP</option>
+<option value="SMA">SMA</option>
+<option value="SMK">SMK</option>
+</select>
+</div>
 
-  <div class="field">
-    <label for="kelas">Nama Kelas</label>
-    <select id="kelas" name="kelas" disabled>
-      <option value="">Pilih jenjang terlebih dahulu</option>
-    </select>
-  </div>
+<div class="field">
+<label for="kelas">Nama Kelas</label>
+<select id="kelas" name="kelas" required disabled>
+<option value="">Pilih jenjang terlebih dahulu</option>
+</select>
+</div>
 
 </div>
 
 <div class="field">
-  <label for="password" id="passwordLabel">PIN dari Guru</label>
-  <input id="password" name="password" type="password"
-    required autocomplete="off" placeholder="Masukkan PIN kelas">
+<label for="password" id="passwordLabel">PIN dari Guru</label>
+<input id="password" name="password" type="password"
+required autocomplete="off" placeholder="Masukkan PIN kelas">
 </div>
 
 <button class="btn primary" type="submit" id="loginButton">
-  Masuk ke Ruang Siswa →
+Masuk ke Ruang Siswa →
 </button>
 
 </form>
 
 <p class="notice" id="loginNotice">
-  Masukkan nama, jenjang, kelas, dan PIN yang diberikan guru.
+Masukkan nama, jenjang, kelas, dan PIN yang diberikan guru.
 </p>
 
 <div id="loginMessage" role="status" aria-live="polite"></div>
@@ -386,22 +298,25 @@ button:disabled {opacity:.65;cursor:wait}
 
 <footer>
 <div class="container">
-  © <span id="year"></span> Ruang Informatika
+© <span id="year"></span> Ruang Informatika
 </div>
 </footer>
 
 <script>
 "use strict";
 
+/*
+  Halaman tujuan setelah login.
+  Dashboard.html akan kita buat dan hubungkan pada tahap berikutnya.
+*/
+const DASHBOARD_URL = "./dashboard.html";
+
 const params = new URLSearchParams(location.search);
 const isLogin = params.get("page") === "login";
 const role = params.get("role") === "guru" ? "guru" : "siswa";
 
-const homePage = document.getElementById("homePage");
-const loginPage = document.getElementById("loginPage");
-
-homePage.classList.toggle("hidden", isLogin);
-loginPage.classList.toggle("hidden", !isLogin);
+document.getElementById("homePage").classList.toggle("hidden", isLogin);
+document.getElementById("loginPage").classList.toggle("hidden", !isLogin);
 document.getElementById("year").textContent = new Date().getFullYear();
 
 const classOptions = {
@@ -437,8 +352,9 @@ const loginButton = document.getElementById("loginButton");
 const studentClassFields = document.getElementById("studentClassFields");
 const passwordInput = document.getElementById("password");
 const usernameInput = document.getElementById("username");
-const nameField = document.getElementById("nameField");
+const loginNotice = document.getElementById("loginNotice");
 
+/* Menampilkan kelas sesuai jenjang yang dipilih. */
 jenjangInput.addEventListener("change", () => {
   const options = classOptions[jenjangInput.value];
 
@@ -457,6 +373,7 @@ jenjangInput.addEventListener("change", () => {
   });
 });
 
+/* Mengatur tampilan formulir sesuai peran pengguna. */
 if (isLogin) {
   const isTeacher = role === "guru";
 
@@ -472,34 +389,35 @@ if (isLogin) {
 
   document.getElementById("loginDescription").textContent =
     isTeacher
-      ? "Masuk menggunakan password khusus guru."
+      ? "Masuk untuk mengelola pembelajaran dan evaluasi."
       : "Masuk untuk melanjutkan pembelajaran.";
 
   loginButton.textContent = isTeacher
-    ? "Masuk Dashboard Guru"
-    : "Masuk Dashboard Siswa →";
+    ? "Masuk Guru"
+    : "Masuk ke Ruang Siswa →";
 
   if (isTeacher) {
-    nameField.classList.add("hidden");
     studentClassFields.classList.add("hidden");
-
-    usernameInput.required = false;
     jenjangInput.required = false;
     kelasInput.required = false;
 
+    document.getElementById("usernameLabel").textContent =
+      "Nama pengguna guru";
+
+    usernameInput.placeholder = "Masukkan username guru";
+    usernameInput.autocomplete = "username";
+
     document.getElementById("passwordLabel").textContent =
-      "Password khusus guru";
+      "Kata sandi guru";
 
-    passwordInput.placeholder = "Masukkan password guru";
+    passwordInput.placeholder = "Masukkan kata sandi guru";
+    passwordInput.autocomplete = "current-password";
 
-    document.getElementById("loginNotice").textContent =
-      "Gunakan satu password khusus yang telah dikonfigurasi oleh pemilik website.";
-  } else {
-    usernameInput.required = true;
-    jenjangInput.required = true;
-    kelasInput.required = true;
+    loginNotice.textContent =
+      "Gunakan username dan kata sandi guru yang telah dikonfigurasi.";
   }
 
+  /* Memproses autentikasi guru dan siswa. */
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -508,11 +426,10 @@ if (isLogin) {
 
     const payload = isTeacher
       ? {
-          role: "guru",
+          username: usernameInput.value.trim(),
           password: passwordInput.value
         }
       : {
-          role: "siswa",
           name: usernameInput.value.trim(),
           jenjang: jenjangInput.value,
           kelas: kelasInput.value,
@@ -521,67 +438,109 @@ if (isLogin) {
 
     if (
       !payload.password ||
-      (!isTeacher &&
-        (!payload.name || !payload.jenjang || !payload.kelas))
+      (isTeacher && !payload.username) ||
+      (!isTeacher && (
+        !payload.name ||
+        !payload.jenjang ||
+        !payload.kelas
+      ))
     ) {
       message.textContent = isTeacher
-        ? "Masukkan password guru."
-        : "Lengkapi nama, jenjang, kelas, dan PIN.";
+        ? "Username dan kata sandi wajib diisi."
+        : "Lengkapi nama, jenjang, kelas, dan PIN terlebih dahulu.";
+
       message.className = "error";
       return;
     }
 
+    const endpoint = isTeacher
+      ? "/.netlify/functions/login"
+      : "/.netlify/functions/verify-class7-exam";
+
     loginButton.disabled = true;
-    loginButton.textContent = "Memeriksa akun...";
+    loginButton.textContent = "Memverifikasi login...";
 
     try {
-      const response = await fetch(
-        "/.netlify/functions/verify-class7-exam",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        }
-      );
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
 
       let result;
 
       try {
         result = await response.json();
       } catch {
-        throw new Error("Respons server tidak dapat dibaca. Periksa deployment Netlify.");
+        throw new Error(
+          "Respons server tidak dapat dibaca. Periksa deployment Netlify."
+        );
       }
 
       if (!response.ok || !result.ok) {
         throw new Error(result.message || "Login gagal.");
       }
 
-      if (!result.token || !result.session) {
-        throw new Error("Server belum mengirim sesi login yang valid.");
+      if (
+        !result.token ||
+        !result.session ||
+        !["guru", "siswa"].includes(result.session.role)
+      ) {
+        throw new Error(
+          "Token sesi tidak ditemukan atau tidak valid."
+        );
       }
 
-      localStorage.setItem("ruangSessionToken", result.token);
-      localStorage.setItem("ruangSession", JSON.stringify(result.session));
+      if (result.session.role !== role) {
+        throw new Error(
+          "Peran sesi tidak sesuai dengan halaman login."
+        );
+      }
 
-      message.textContent = "Login berhasil. Mengalihkan dashboard...";
+      /* Simpan token yang dibutuhkan content-api.js. */
+      sessionStorage.setItem(
+        "ri_session_token",
+        result.token
+      );
+
+      sessionStorage.setItem(
+        "ri_session",
+        JSON.stringify(result.session)
+      );
+
+      message.textContent =
+        "Login berhasil. Membuka dashboard...";
+
       message.className = "success";
 
-      location.replace(
-        isTeacher ? "./dashboard-guru.html" : "./dashboard-siswa.html"
+      /* Arahkan pengguna ke dashboard setelah login. */
+      const destination = new URL(
+        DASHBOARD_URL,
+        window.location.href
       );
+
+      destination.searchParams.set(
+        "role",
+        result.session.role
+      );
+
+      window.location.assign(destination.toString());
 
     } catch (error) {
       message.textContent =
-        error.message || "Terjadi kesalahan saat menghubungi server.";
+        error.message ||
+        "Terjadi kesalahan saat menghubungi server.";
+
       message.className = "error";
 
     } finally {
       loginButton.disabled = false;
+
       loginButton.textContent = isTeacher
-        ? "Masuk Dashboard Guru"
-        : "Masuk Dashboard Siswa →";
+        ? "Masuk Guru"
+        : "Masuk ke Ruang Siswa →";
     }
   });
 }
