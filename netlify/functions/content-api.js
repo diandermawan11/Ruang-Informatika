@@ -1,9 +1,13 @@
-
 const crypto = require("crypto");
 
-const SHEETS_WEB_APP_URL = process.env.SHEETS_WEB_APP_URL;
-const CONTENT_API_SECRET = process.env.CONTENT_API_SECRET;
-const SESSION_SECRET = process.env.SESSION_SECRET;
+const SHEETS_WEB_APP_URL =
+  process.env.SHEETS_WEB_APP_URL;
+
+const CONTENT_API_SECRET =
+  process.env.CONTENT_API_SECRET;
+
+const SESSION_SECRET =
+  process.env.SESSION_SECRET;
 
 const TEACHER_ACTIONS = new Set([
   "listContent",
@@ -28,98 +32,6 @@ const STUDENT_ACTIONS = new Set([
   "listResults"
 ]);
 
-function reply(statusCode, body) {
-  return {
-    statusCode,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store"
-    },
-    body: JSON.stringify(body)
-  };
-}
-
-function safeEqual(first, second) {
-  if (
-    typeof first !== "string" ||
-    typeof second !== "string"
-  ) {
-    return false;
-  }
-
-  const a = Buffer.from(first);
-  const b = Buffer.from(second);
-
-  if (a.length !== b.length) {
-    return false;
-  }
-
-  return crypto.timingSafeEqual(a, b);
-}
-
-function verifySession(event) {
-  if (!SESSION_SECRET || SESSION_SECRET.length < 32) {
-    throw new Error("SESSION_SECRET belum dikonfigurasi.");
-  }
-
-  const headers = event.headers || {};
-
-  const authorization =
-    headers.authorization ||
-    headers.Authorization ||
-    "";
-
-  if (!authorization.startsWith("Bearer ")) {
-    return null;
-  }
-
-  const token = authorization.slice(7);
-  const parts = token.split(".");
-
-  if (parts.length !== 2) {
-    return null;
-  }
-
-  const expectedSignature = crypto
-    .createHmac("sha256", SESSION_SECRET)
-    .update(parts[0])
-    .digest("base64url");
-
-  if (!safeEqual(expectedSignature, parts[1])) {
-    return null;
-  }
-
-  try {
-    const session = JSON.parse(
-      Buffer.from(parts[0], "base64url").toString("utf8")
-    );
-
-    if (
-      !session.exp ||
-      session.exp < Date.now() ||
-      !["guru", "siswa"].includes(session.role)
-    ) {
-      return null;
-    }
-
-    if (
-      session.role === "siswa" &&
-      (
-        !session.name ||
-        !session.jenjang ||
-        !session.kelas
-      )
-    ) {
-      return null;
-    }
-
-    return session;
-
-  } catch {
-    return null;
-  }
-}
-
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return reply(405, {
@@ -128,29 +40,29 @@ exports.handler = async (event) => {
     });
   }
 
+  const requestSize = Buffer.byteLength(
+    event.body || "",
+    "utf8"
+  );
+
+  if (requestSize > 5.5 * 1024 * 1024) {
+    return reply(413, {
+      ok: false,
+      message: "Ukuran permintaan terlalu besar."
+    });
+  }
+
   if (!SHEETS_WEB_APP_URL || !CONTENT_API_SECRET) {
     return reply(503, {
       ok: false,
-      message: "Konfigurasi penyimpanan belum lengkap."
+      message: "Konfigurasi Google Sheets belum lengkap."
     });
   }
 
-  if (
-    !SESSION_SECRET ||
-    SESSION_SECRET.length < 32
-  ) {
+  if (!SESSION_SECRET || SESSION_SECRET.length < 32) {
     return reply(503, {
       ok: false,
       message: "Konfigurasi sesi belum lengkap."
-    });
-  }
-
-  const session = verifySession(event);
-
-  if (!session) {
-    return reply(401, {
-      ok: false,
-      message: "Sesi login tidak valid. Silakan login kembali."
     });
   }
 
@@ -165,6 +77,15 @@ exports.handler = async (event) => {
     });
   }
 
+  const session = verifySession(event);
+
+  if (!session) {
+    return reply(401, {
+      ok: false,
+      message: "Sesi login tidak valid. Silakan login kembali."
+    });
+  }
+
   const action = data.action;
 
   const allowedActions = session.role === "guru"
@@ -174,26 +95,13 @@ exports.handler = async (event) => {
   if (!allowedActions.has(action)) {
     return reply(403, {
       ok: false,
-      message: "Anda tidak memiliki izin untuk tindakan ini."
+      message: "Anda tidak memiliki izin melakukan tindakan ini."
     });
   }
 
-  // Batasi ukuran permintaan agar upload tidak melebihi
-  // batas aman Netlify Functions.
-  const requestSize = Buffer.byteLength(
-    event.body || "",
-    "utf8"
-  );
+  // Identitas sesi berasal dari token yang diverifikasi.
+  // Browser tidak boleh menentukan identitas pengguna.
 
-  if (requestSize > 5.5 * 1024 * 1024) {
-    return reply(413, {
-      ok: false,
-      message: "Ukuran permintaan terlalu besar. Maksimal upload file 4 MB."
-    });
-  }
-
-  // Identitas siswa selalu berasal dari token server,
-  // bukan dari data yang dikirim browser.
   const payload = {
     ...data,
     action,
@@ -253,3 +161,101 @@ exports.handler = async (event) => {
   }
 };
 
+// =====================================
+// VERIFIKASI TOKEN SESI
+// =====================================
+
+function verifySession(event) {
+  const headers = event.headers || {};
+
+  const authorization =
+    headers.authorization ||
+    headers.Authorization ||
+    "";
+
+  if (!authorization.startsWith("Bearer ")) {
+    return null;
+  }
+
+  const token = authorization.slice(7);
+  const parts = token.split(".");
+
+  if (parts.length !== 2) {
+    return null;
+  }
+
+  const expectedSignature = crypto
+    .createHmac("sha256", SESSION_SECRET)
+    .update(parts[0])
+    .digest("base64url");
+
+  if (!safeEqual(expectedSignature, parts[1])) {
+    return null;
+  }
+
+  try {
+    const session = JSON.parse(
+      Buffer.from(parts[0], "base64url").toString("utf8")
+    );
+
+    if (
+      !session.exp ||
+      session.exp <= Date.now() ||
+      !["guru", "siswa"].includes(session.role)
+    ) {
+      return null;
+    }
+
+    if (!session.name) {
+      return null;
+    }
+
+    if (
+      session.role === "siswa" &&
+      (
+        !session.jenjang ||
+        !session.kelas
+      )
+    ) {
+      return null;
+    }
+
+    return session;
+
+  } catch {
+    return null;
+  }
+}
+
+// =====================================
+// UTILITAS
+// =====================================
+
+function safeEqual(first, second) {
+  if (
+    typeof first !== "string" ||
+    typeof second !== "string"
+  ) {
+    return false;
+  }
+
+  const a = Buffer.from(first);
+  const b = Buffer.from(second);
+
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(a, b);
+}
+
+function reply(statusCode, body) {
+  return {
+    statusCode,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store"
+    },
+    body: JSON.stringify(body)
+  };
+}
