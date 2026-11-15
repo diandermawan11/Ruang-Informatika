@@ -17,7 +17,8 @@
 }
 * {box-sizing:border-box}
 body {
-  margin:0;color:var(--text);
+  margin:0;
+  color:var(--text);
   font:15px/1.65 system-ui,sans-serif;
   background:radial-gradient(ellipse at 80% 10%,#125bbe35,transparent 35%),var(--bg);
 }
@@ -25,10 +26,12 @@ a {color:inherit;text-decoration:none}
 .container {width:min(1160px,calc(100% - 36px));margin:auto}
 header {
   position:sticky;top:0;z-index:10;
-  background:#051125ed;border-bottom:1px solid var(--line);
+  background:#051125ed;
+  border-bottom:1px solid var(--line);
 }
 .nav {
-  min-height:76px;display:flex;align-items:center;
+  min-height:76px;
+  display:flex;align-items:center;
   justify-content:space-between;gap:16px;
 }
 .brand {font-size:18px;font-weight:850}
@@ -36,12 +39,19 @@ header {
 .btn {
   display:inline-flex;justify-content:center;
   padding:11px 16px;border-radius:12px;
-  border:1px solid var(--line);font-weight:750;cursor:pointer;
+  border:1px solid var(--line);
+  font-weight:750;cursor:pointer;
 }
-.primary {background:linear-gradient(100deg,#1687ff,#3974ff);border-color:transparent}
+.primary {
+  background:linear-gradient(100deg,#1687ff,#3974ff);
+  border-color:transparent;
+}
 .outline {background:#071831;border-color:var(--blue)}
 .hero {padding:65px 0 32px}
-.hero-grid {display:grid;grid-template-columns:1fr 1fr;gap:25px;align-items:center}
+.hero-grid {
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:25px;align-items:center;
+}
 h1 {font-size:clamp(39px,5vw,63px);line-height:1.1}
 .gradient {
   background:linear-gradient(95deg,#65caff,#3987ff,#a6a4ff);
@@ -91,7 +101,8 @@ footer {border-top:1px solid var(--line);padding:24px 0;color:#91a7c5}
 }
 .role {
   display:inline-block;padding:5px 10px;border-radius:20px;
-  background:#2387ff30;color:#8ad8ff;font-size:11px;font-weight:850;
+  background:#2387ff30;color:#8ad8ff;
+  font-size:11px;font-weight:850;
 }
 .login-card h1 {font-size:30px}
 .login-card p {color:var(--muted);font-size:13px}
@@ -103,13 +114,15 @@ footer {border-top:1px solid var(--line);padding:24px 0;color:#91a7c5}
 .field {margin:16px 0}
 .field label {display:block;font-size:13px;margin-bottom:7px}
 .field input,.field select {
-  width:100%;padding:13px;border:1px solid #74a4e655;
-  border-radius:10px;background:#07172e;color:white;font:inherit;
+  width:100%;padding:13px;
+  border:1px solid #74a4e655;border-radius:10px;
+  background:#07172e;color:white;font:inherit;
 }
 .login-card button {width:100%}
 .notice {
-  padding:12px;border-radius:10px;background:#f4b14a14;
-  border:1px solid #f4b14a50;color:#f4d49d!important;
+  padding:12px;border-radius:10px;
+  background:#f4b14a14;border:1px solid #f4b14a50;
+  color:#f4d49d!important;
 }
 #loginMessage {font-size:13px;margin-top:12px}
 #loginMessage.error {color:#ffb4b4}
@@ -148,7 +161,6 @@ button:disabled {opacity:.65;cursor:wait}
 </header>
 
 <main id="homePage">
-
 <section class="hero" id="beranda">
 <div class="container hero-grid">
 <div>
@@ -193,11 +205,11 @@ button:disabled {opacity:.65;cursor:wait}
 <h2>Semua kebutuhan belajar dalam satu platform.</h2>
 <div class="cards">
   <article class="card"><h3>Materi Pembelajaran</h3><p>Pelajari konsep Informatika secara terstruktur.</p></article>
-  <article class="card"><h3>Ulangan Harian</h3><p>Kerjakan ulangan berdasarkan kelas.</p><a class="btn outline" href="./ulangan-smp7.html">Ulangan Kelas 7</a></article>
+  <article class="card"><h3>Ulangan Harian</h3><p>Ulangan dibuat dan dikelola guru untuk semua jenjang.</p></article>
   <article class="card"><h3>Laboratorium Praktik</h3><p>Latihan algoritma dan pemrograman.</p></article>
-  <article class="card"><h3>Tugas dan Proyek</h3><p>Kerjakan proyek praktik.</p></article>
-  <article class="card"><h3>Rekap Nilai</h3><p>Pengelolaan hasil belajar siswa.</p></article>
-  <article class="card"><h3>Ruang Guru</h3><p>Pengelolaan materi dan evaluasi.</p></article>
+  <article class="card"><h3>Tugas dan Proyek</h3><p>Kerjakan dan kumpulkan proyek praktik.</p></article>
+  <article class="card"><h3>Rekap Nilai</h3><p>Pantau hasil belajar siswa.</p></article>
+  <article class="card"><h3>Ruang Guru</h3><p>Kelola materi, ujian, tugas, dan penilaian.</p></article>
 </div>
 </div>
 </section>
@@ -232,10 +244,8 @@ button:disabled {opacity:.65;cursor:wait}
 <main id="loginPage" class="hidden">
 <div class="login-wrap">
 <div class="login-card">
-
 <a href="./index.html">← Kembali ke beranda</a>
 <p><span class="role" id="rolePill">AKSES SISWA</span></p>
-
 <h1 id="loginTitle">Selamat datang, Pembelajar.</h1>
 <p id="loginDescription">Masuk untuk melanjutkan pembelajaran.</p>
 
@@ -245,7 +255,6 @@ button:disabled {opacity:.65;cursor:wait}
 </div>
 
 <form id="loginForm">
-
 <div class="field">
 <label for="username" id="usernameLabel">Nama lengkap</label>
 <input id="username" name="username" type="text" required maxlength="100"
@@ -253,7 +262,6 @@ placeholder="Masukkan nama lengkap" autocomplete="name">
 </div>
 
 <div id="studentClassFields">
-
 <div class="field">
 <label for="jenjang">Jenjang Pendidikan</label>
 <select id="jenjang" name="jenjang" required>
@@ -271,7 +279,6 @@ placeholder="Masukkan nama lengkap" autocomplete="name">
 <option value="">Pilih jenjang terlebih dahulu</option>
 </select>
 </div>
-
 </div>
 
 <div class="field">
@@ -283,15 +290,12 @@ required autocomplete="off" placeholder="Masukkan PIN kelas">
 <button class="btn primary" type="submit" id="loginButton">
 Masuk ke Ruang Siswa →
 </button>
-
 </form>
 
 <p class="notice" id="loginNotice">
 Masukkan nama, jenjang, kelas, dan PIN yang diberikan guru.
 </p>
-
 <div id="loginMessage" role="status" aria-live="polite"></div>
-
 </div>
 </div>
 </main>
@@ -305,10 +309,7 @@ Masukkan nama, jenjang, kelas, dan PIN yang diberikan guru.
 <script>
 "use strict";
 
-/*
-  Halaman tujuan setelah login.
-  Dashboard.html akan kita buat dan hubungkan pada tahap berikutnya.
-*/
+const LOGIN_ENDPOINT = "/.netlify/functions/login";
 const DASHBOARD_URL = "./dashboard.html";
 
 const params = new URLSearchParams(location.search);
@@ -354,7 +355,6 @@ const passwordInput = document.getElementById("password");
 const usernameInput = document.getElementById("username");
 const loginNotice = document.getElementById("loginNotice");
 
-/* Menampilkan kelas sesuai jenjang yang dipilih. */
 jenjangInput.addEventListener("change", () => {
   const options = classOptions[jenjangInput.value];
 
@@ -367,13 +367,11 @@ jenjangInput.addEventListener("change", () => {
   }
 
   kelasInput.add(new Option("Pilih kelas", ""));
-
   options.forEach(([value, label]) => {
     kelasInput.add(new Option(label, value));
   });
 });
 
-/* Mengatur tampilan formulir sesuai peran pengguna. */
 if (isLogin) {
   const isTeacher = role === "guru";
 
@@ -403,13 +401,11 @@ if (isLogin) {
 
     document.getElementById("usernameLabel").textContent =
       "Nama pengguna guru";
-
     usernameInput.placeholder = "Masukkan username guru";
     usernameInput.autocomplete = "username";
 
     document.getElementById("passwordLabel").textContent =
       "Kata sandi guru";
-
     passwordInput.placeholder = "Masukkan kata sandi guru";
     passwordInput.autocomplete = "current-password";
 
@@ -417,7 +413,6 @@ if (isLogin) {
       "Gunakan username dan kata sandi guru yang telah dikonfigurasi.";
   }
 
-  /* Memproses autentikasi guru dan siswa. */
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -426,10 +421,12 @@ if (isLogin) {
 
     const payload = isTeacher
       ? {
+          role: "guru",
           username: usernameInput.value.trim(),
           password: passwordInput.value
         }
       : {
+          role: "siswa",
           name: usernameInput.value.trim(),
           jenjang: jenjangInput.value,
           kelas: kelasInput.value,
@@ -448,35 +445,25 @@ if (isLogin) {
       message.textContent = isTeacher
         ? "Username dan kata sandi wajib diisi."
         : "Lengkapi nama, jenjang, kelas, dan PIN terlebih dahulu.";
-
       message.className = "error";
       return;
     }
-
-    const endpoint = isTeacher
-      ? "/.netlify/functions/login"
-      : "/.netlify/functions/verify-class7-exam";
 
     loginButton.disabled = true;
     loginButton.textContent = "Memverifikasi login...";
 
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch(LOGIN_ENDPOINT, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify(payload)
       });
 
       let result;
-
       try {
         result = await response.json();
       } catch {
-        throw new Error(
-          "Respons server tidak dapat dibaca. Periksa deployment Netlify."
-        );
+        throw new Error("Respons server tidak dapat dibaca.");
       }
 
       if (!response.ok || !result.ok) {
@@ -486,58 +473,28 @@ if (isLogin) {
       if (
         !result.token ||
         !result.session ||
-        !["guru", "siswa"].includes(result.session.role)
+        result.session.role !== role
       ) {
-        throw new Error(
-          "Token sesi tidak ditemukan atau tidak valid."
-        );
+        throw new Error("Token atau jenis sesi tidak valid.");
       }
 
-      if (result.session.role !== role) {
-        throw new Error(
-          "Peran sesi tidak sesuai dengan halaman login."
-        );
-      }
+      sessionStorage.setItem("ri_session_token", result.token);
+      sessionStorage.setItem("ri_session", JSON.stringify(result.session));
 
-      /* Simpan token yang dibutuhkan content-api.js. */
-      sessionStorage.setItem(
-        "ri_session_token",
-        result.token
-      );
-
-      sessionStorage.setItem(
-        "ri_session",
-        JSON.stringify(result.session)
-      );
-
-      message.textContent =
-        "Login berhasil. Membuka dashboard...";
-
+      message.textContent = "Login berhasil. Membuka dashboard...";
       message.className = "success";
 
-      /* Arahkan pengguna ke dashboard setelah login. */
-      const destination = new URL(
-        DASHBOARD_URL,
-        window.location.href
+      window.location.assign(
+        DASHBOARD_URL + "?role=" + encodeURIComponent(result.session.role)
       );
-
-      destination.searchParams.set(
-        "role",
-        result.session.role
-      );
-
-      window.location.assign(destination.toString());
 
     } catch (error) {
-      message.textContent =
-        error.message ||
+      message.textContent = error.message ||
         "Terjadi kesalahan saat menghubungi server.";
-
       message.className = "error";
 
     } finally {
       loginButton.disabled = false;
-
       loginButton.textContent = isTeacher
         ? "Masuk Guru"
         : "Masuk ke Ruang Siswa →";
